@@ -28,6 +28,21 @@ class Product(db.Model):
 
     category = db.Column(db.Integer, db.ForeignKey("category.id"))
 
+    def serialize(self):
+        data = {
+            "id": self.id,
+            "name": self.name,
+            "price": self.price,
+            "stock": self.stock
+        }
+
+        category = Category.query.filter_by(id=int(self.category)).first()
+        if category:
+            data["category"] = category.serialize()
+
+        return data
+
+
 
 class Cart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
